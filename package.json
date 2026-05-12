@@ -1,0 +1,17 @@
+{
+  "name": "cartify",
+  "version": "1.0.0",
+  "description": "Cartify - Mini E-Commerce App",
+  "type": "module",
+  "scripts": {
+    "start": "npm prefix backend run start",
+    "server": "npm prefix backend run server",
+    "client": "npm prefix frontend run dev",
+    "dev": "npm prefix backend run dev",
+    "data:import": "npm prefix backend run data:import",
+    "data:destroy": "npm prefix backend run data:destroy",
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend"
+  },
+  "author": "",
+  "license": "ISC"
+}
