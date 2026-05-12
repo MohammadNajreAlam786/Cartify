@@ -29,8 +29,8 @@ app.use('/api/orders', orderRoutes);
 app.get('/api/config/stripe', (req, res) => res.send(process.env.STRIPE_PUBLIC_KEY));
 
 const __dirname = path.resolve();
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/uploads', express.static(path.join(__dirname, 'backend', 'uploads')));
+app.use('/images', express.static(path.join(__dirname, 'backend', 'images')));
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/frontend/dist')));
