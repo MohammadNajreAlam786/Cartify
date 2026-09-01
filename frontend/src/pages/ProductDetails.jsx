@@ -5,6 +5,7 @@ import { useGetProductDetailsQuery } from '../slices/productsApiSlice';
 import { addToCart } from '../slices/cartSlice';
 import { Star, ArrowLeft } from 'lucide-react';
 import { formatINR } from '../utils/formatPrice';
+import { BASE_URL } from '../utils/constants';
 
 const ProductDetails = () => {
   const { id: productId } = useParams();
@@ -13,7 +14,8 @@ const ProductDetails = () => {
 
   const [qty, setQty] = useState(1);
 
-  const { data: product, isLoading, error } = useGetProductDetailsQuery(productId);
+  const { data: product, isLoading, error } =
+    useGetProductDetailsQuery(productId);
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, qty }));
@@ -30,15 +32,25 @@ const ProductDetails = () => {
 
   if (error) {
     return (
-      <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+      <div
+        className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4"
+        role="alert"
+      >
         <p>{error?.data?.message || 'Something went wrong'}</p>
       </div>
     );
   }
 
+  const imageUrl = product.image?.startsWith('http')
+    ? product.image
+    : `${BASE_URL}${product.image}`;
+
   return (
     <div className="container mx-auto py-8">
-      <Link to="/" className="inline-flex items-center text-gray-600 hover:text-primary mb-6 transition">
+      <Link
+        to="/"
+        className="inline-flex items-center text-gray-600 hover:text-primary mb-6 transition"
+      >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Go Back
       </Link>
@@ -46,31 +58,53 @@ const ProductDetails = () => {
       <div className="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col md:flex-row p-6 gap-8">
         <div className="md:w-1/2 flex justify-center items-center bg-gray-50 p-8 rounded-lg">
           <img
-            src={product.image}
+            src={imageUrl}
             alt={product.name}
             className="max-h-96 object-contain"
-            onError={(e) => { e.target.onerror = null; e.target.src = '/images/sample.jpg'; }}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `${BASE_URL}/images/tshirt.jpg`;
+            }}
           />
         </div>
 
         <div className="md:w-1/2 flex flex-col justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              {product.name}
+            </h1>
+
             <div className="flex items-center mb-4">
               <div className="flex bg-green-600 text-white px-2 py-1 rounded items-center text-sm">
                 <span className="font-bold mr-1">{product.rating}</span>
                 <Star className="w-4 h-4 fill-current" />
               </div>
-              <span className="text-gray-500 ml-3">{product.numReviews} Reviews</span>
+
+              <span className="text-gray-500 ml-3">
+                {product.numReviews} Reviews
+              </span>
             </div>
-            <p className="text-3xl text-gray-900 font-bold mb-6">{formatINR(product.price)}</p>
-            <p className="text-gray-700 mb-6 leading-relaxed">{product.description}</p>
+
+            <p className="text-3xl text-gray-900 font-bold mb-6">
+              {formatINR(product.price)}
+            </p>
+
+            <p className="text-gray-700 mb-6 leading-relaxed">
+              {product.description}
+            </p>
           </div>
 
           <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
             <div className="flex justify-between mb-4 border-b pb-4 border-gray-200">
               <span className="text-gray-600 font-medium">Status</span>
-              <span className={`font-bold ${product.countInStock > 0 ? 'text-green-600' : 'text-red-500'}`}>
+
+              <span
+                className={`font-bold ${
+                  product.countInStock > 0
+                    ? 'text-green-600'
+                    : 'text-red-500'
+                }`}
+              >
                 {product.countInStock > 0 ? 'In Stock' : 'Out of Stock'}
               </span>
             </div>
@@ -78,6 +112,7 @@ const ProductDetails = () => {
             {product.countInStock > 0 && (
               <div className="flex justify-between items-center mb-6">
                 <span className="text-gray-600 font-medium">Quantity</span>
+
                 <select
                   value={qty}
                   onChange={(e) => setQty(Number(e.target.value))}
