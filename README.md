@@ -81,7 +81,7 @@ The application is configured to serve the frontend from the backend in producti
 1. Ensure `NODE_ENV` is set to `production` in your environment variables on the hosting platform.
 2. The build command should be `npm run build`.
 3. The start command should be `npm start`.
-4. Live Demo Link: https://cartify-nst7.onrender.com
+4. Live Demo Link: https://cartify-shopin.vercel.app
 
 ## License
 
